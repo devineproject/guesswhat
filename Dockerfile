@@ -1,11 +1,15 @@
-FROM tensorflow/tensorflow:latest-py3
+ARG tensorflow_docker=1.11.0-py3
+
+FROM tensorflow/tensorflow:$tensorflow_docker
+
+ARG tensorflow_package=tensorflow
 
 WORKDIR /usr/src/guesswhat
 
 COPY . /usr/src/guesswhat
 
 RUN apt-get update && apt-get install -y wget \
-    && pip install nltk tensorflow tqdm image \
+    && pip install nltk tqdm image $tensorflow_package \
     && mkdir data data/img data/img/raw data/img/ft_vgg_img data/img/ft_vgg_crop \
              out out/oracle out/guesser out/qgen out/looper \
     && wget https://s3-us-west-2.amazonaws.com/guess-what/guesswhat.train.jsonl.gz -P data \
